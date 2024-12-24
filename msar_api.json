@@ -1,0 +1,831 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "Login credentials",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              },
+              "examples": {
+                "example1": {
+                  "summary": "Standard login example",
+                  "value": {
+                    "nameOrEmailOrPhoneNumber": "+963xxxxxxx , www@google.com, username",
+                    "password": "password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "message": "Login successful",
+            "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInBob25lTnVtYmVyIjpudWxsLCJpYXQiOjE3MzUwNDY5MDUsImV4cCI6MTczNTY1MTcwNX0.FDf2IR9f_A7K563zyHd3KXFmYH458cXusAmTKe4X37A",
+            "user": {
+              "id": 1,
+              "email": "newuser@example.com",
+              "phoneNumber": null,
+              "username": "John Doe",
+              "role": "BUYER"
+            }
+          },
+          "401": {
+            "description": "Invalid phone number or OTP"
+          }
+        },
+        "summary": "Login with phone number and OTP",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/email-signup": {
+      "post": {
+        "operationId": "AuthController_signUpByEmail",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "User registration details including driver license",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailSignupDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully."
+          },
+          "400": {
+            "description": "Failed to upload driver license"
+          },
+          "403": {
+            "description": "User with this phone number or plate number already exists"
+          }
+        },
+        "summary": "Register a new user",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "operationId": "AuthController_signUpByPhone",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "User registration details including driver license",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PhoneSignupDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully."
+          },
+          "400": {
+            "description": "Failed to upload driver license"
+          },
+          "403": {
+            "description": "User with this phone number or plate number already exists"
+          }
+        },
+        "summary": "Register a new user",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/sell-listings": {
+      "post": {
+        "operationId": "SellListingController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSellListingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Create a sell listing",
+        "tags": [
+          "Sell Listings"
+        ]
+      },
+      "get": {
+        "operationId": "SellListingController_findAll",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Retrieve all sell listings with pagination",
+        "tags": [
+          "Sell Listings"
+        ]
+      }
+    },
+    "/sell-listings/{id}": {
+      "patch": {
+        "operationId": "SellListingController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSellListingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Update a sell listing",
+        "tags": [
+          "Sell Listings"
+        ]
+      },
+      "delete": {
+        "operationId": "SellListingController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Delete a sell listing",
+        "tags": [
+          "Sell Listings"
+        ]
+      }
+    },
+    "/sell-listings/user": {
+      "get": {
+        "operationId": "SellListingController_findUserListings",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Retrieve listings of the authenticated user with pagination",
+        "tags": [
+          "Sell Listings"
+        ]
+      }
+    },
+    "/rent-listings": {
+      "post": {
+        "operationId": "RentListingController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRentListingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Create a rent listing",
+        "tags": [
+          "Rent Listings"
+        ]
+      },
+      "get": {
+        "operationId": "RentListingController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Retrieve all rent listings with pagination",
+        "tags": [
+          "Rent Listings"
+        ]
+      }
+    },
+    "/rent-listings/{id}": {
+      "patch": {
+        "operationId": "RentListingController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRentListingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Update a rent listing",
+        "tags": [
+          "Rent Listings"
+        ]
+      },
+      "delete": {
+        "operationId": "RentListingController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Delete a rent listing",
+        "tags": [
+          "Rent Listings"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "API Documentation",
+    "description": "The API description for my app",
+    "version": "1.0.1",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "nameOrEmailOrPhoneNumber": {
+            "type": "string",
+            "description": "User email address or phone number or user name ",
+            "example": "user@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password",
+            "example": "StrongP@ssw0rd!"
+          }
+        },
+        "required": [
+          "nameOrEmailOrPhoneNumber",
+          "password"
+        ]
+      },
+      "EmailSignupDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User email address",
+            "example": "newuser@example.com"
+          },
+          "name": {
+            "type": "string",
+            "description": "User name",
+            "example": "John Doe"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password",
+            "example": "SecureP@ss123"
+          }
+        },
+        "required": [
+          "email",
+          "name",
+          "password"
+        ]
+      },
+      "PhoneSignupDto": {
+        "type": "object",
+        "properties": {
+          "phoneNumber": {
+            "type": "string",
+            "description": "User phone number in international format",
+            "example": "+1234567890"
+          },
+          "name": {
+            "type": "string",
+            "description": "User name",
+            "example": "Jane Doe"
+          },
+          "password": {
+            "type": "string",
+            "description": "password",
+            "example": "**********"
+          }
+        },
+        "required": [
+          "phoneNumber",
+          "name",
+          "password"
+        ]
+      },
+      "CreateSellListingDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Toyota Corolla",
+            "description": "The title of the listing"
+          },
+          "brand": {
+            "type": "string",
+            "example": "Toyota",
+            "description": "The brand of the vehicle"
+          },
+          "model": {
+            "type": "string",
+            "example": "Corolla",
+            "description": "The model of the vehicle"
+          },
+          "status": {
+            "type": "string",
+            "example": "Available",
+            "description": "The status of the listing"
+          },
+          "productionYear": {
+            "type": "number",
+            "example": 2020,
+            "description": "The production year of the vehicle"
+          },
+          "fuelType": {
+            "type": "string",
+            "example": "Petrol",
+            "description": "The fuel type of the vehicle"
+          },
+          "gear": {
+            "type": "string",
+            "example": "Automatic",
+            "description": "The gear type of the vehicle"
+          },
+          "distancePer20Meter": {
+            "type": "number",
+            "example": 15.6,
+            "description": "Distance covered per 20 meters in liters"
+          },
+          "milage": {
+            "type": "number",
+            "example": 50000,
+            "description": "The mileage of the vehicle in kilometers"
+          },
+          "horsepower": {
+            "type": "number",
+            "example": 150,
+            "description": "The horsepower of the vehicle"
+          },
+          "color": {
+            "type": "string",
+            "example": "Red",
+            "description": "The color of the vehicle"
+          },
+          "seats": {
+            "type": "number",
+            "example": 5,
+            "description": "The number of seats in the vehicle"
+          },
+          "doorCount": {
+            "type": "number",
+            "example": 4,
+            "description": "The number of doors in the vehicle"
+          },
+          "interiorMaterials": {
+            "type": "string",
+            "example": "Leather",
+            "description": "The interior materials of the vehicle"
+          },
+          "ac": {
+            "type": "boolean",
+            "example": true,
+            "description": "Whether the vehicle has air conditioning"
+          },
+          "extraFeatures": {
+            "example": [
+              "Sunroof",
+              "Bluetooth"
+            ],
+            "description": "Extra features of the vehicle",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "price": {
+            "type": "number",
+            "example": 15000,
+            "description": "The price of the vehicle"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Well maintained",
+            "description": "Additional notes about the listing"
+          },
+          "publicity": {
+            "type": "string",
+            "example": "Public",
+            "description": "The publicity status of the listing"
+          }
+        },
+        "required": [
+          "title"
+        ]
+      },
+      "UpdateSellListingDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Toyota Corolla",
+            "description": "The title of the listing"
+          },
+          "brand": {
+            "type": "string",
+            "example": "Toyota",
+            "description": "The brand of the vehicle"
+          },
+          "model": {
+            "type": "string",
+            "example": "Corolla",
+            "description": "The model of the vehicle"
+          },
+          "status": {
+            "type": "string",
+            "example": "Available",
+            "description": "The status of the listing"
+          },
+          "productionYear": {
+            "type": "number",
+            "example": 2020,
+            "description": "The production year of the vehicle"
+          },
+          "fuelType": {
+            "type": "string",
+            "example": "Petrol",
+            "description": "The fuel type of the vehicle"
+          },
+          "gear": {
+            "type": "string",
+            "example": "Automatic",
+            "description": "The gear type of the vehicle"
+          },
+          "distancePer20Meter": {
+            "type": "number",
+            "example": 15.6,
+            "description": "Distance covered per 20 meters in liters"
+          },
+          "milage": {
+            "type": "number",
+            "example": 50000,
+            "description": "The mileage of the vehicle in kilometers"
+          },
+          "horsepower": {
+            "type": "number",
+            "example": 150,
+            "description": "The horsepower of the vehicle"
+          },
+          "color": {
+            "type": "string",
+            "example": "Red",
+            "description": "The color of the vehicle"
+          },
+          "seats": {
+            "type": "number",
+            "example": 5,
+            "description": "The number of seats in the vehicle"
+          },
+          "doorCount": {
+            "type": "number",
+            "example": 4,
+            "description": "The number of doors in the vehicle"
+          },
+          "interiorMaterials": {
+            "type": "string",
+            "example": "Leather",
+            "description": "The interior materials of the vehicle"
+          },
+          "ac": {
+            "type": "boolean",
+            "example": true,
+            "description": "Whether the vehicle has air conditioning"
+          },
+          "extraFeatures": {
+            "example": [
+              "Sunroof",
+              "Bluetooth"
+            ],
+            "description": "Extra features of the vehicle",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "price": {
+            "type": "number",
+            "example": 15000,
+            "description": "The price of the vehicle"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Well maintained",
+            "description": "Additional notes about the listing"
+          },
+          "publicity": {
+            "type": "string",
+            "example": "Public",
+            "description": "The publicity status of the listing"
+          }
+        }
+      },
+      "CreateRentListingDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Toyota Corolla",
+            "description": "The title of the listing"
+          },
+          "brand": {
+            "type": "string",
+            "example": "Toyota",
+            "description": "The brand of the vehicle"
+          },
+          "model": {
+            "type": "string",
+            "example": "Corolla",
+            "description": "The model of the vehicle"
+          },
+          "productionYear": {
+            "type": "number",
+            "example": 2020,
+            "description": "The production year of the vehicle"
+          },
+          "fuelType": {
+            "type": "string",
+            "example": "Petrol",
+            "description": "The fuel type of the vehicle"
+          },
+          "gear": {
+            "type": "string",
+            "example": "Automatic",
+            "description": "The gear type of the vehicle"
+          },
+          "privateDriver": {
+            "type": "boolean",
+            "example": true,
+            "description": "Whether the rent includes a private driver"
+          },
+          "color": {
+            "type": "string",
+            "example": "Red",
+            "description": "The color of the vehicle"
+          },
+          "extraFeatures": {
+            "example": [
+              "Bluetooth",
+              "Navigation"
+            ],
+            "description": "Extra features of the vehicle",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "insurance": {
+            "type": "boolean",
+            "example": true,
+            "description": "Whether the rent includes insurance"
+          },
+          "priceDaily": {
+            "type": "number",
+            "example": 50,
+            "description": "The daily price for renting the vehicle"
+          },
+          "priceWeekly": {
+            "type": "number",
+            "example": 300,
+            "description": "The weekly price for renting the vehicle"
+          },
+          "priceMonthly": {
+            "type": "number",
+            "example": 1000,
+            "description": "The monthly price for renting the vehicle"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Available for long-term rental",
+            "description": "Additional notes about the listing"
+          },
+          "publicity": {
+            "type": "string",
+            "example": "Public",
+            "description": "The publicity status of the listing"
+          }
+        },
+        "required": [
+          "title",
+          "priceDaily"
+        ]
+      },
+      "UpdateRentListingDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Toyota Corolla",
+            "description": "The title of the listing"
+          },
+          "brand": {
+            "type": "string",
+            "example": "Toyota",
+            "description": "The brand of the vehicle"
+          },
+          "model": {
+            "type": "string",
+            "example": "Corolla",
+            "description": "The model of the vehicle"
+          },
+          "productionYear": {
+            "type": "number",
+            "example": 2020,
+            "description": "The production year of the vehicle"
+          },
+          "fuelType": {
+            "type": "string",
+            "example": "Petrol",
+            "description": "The fuel type of the vehicle"
+          },
+          "gear": {
+            "type": "string",
+            "example": "Automatic",
+            "description": "The gear type of the vehicle"
+          },
+          "privateDriver": {
+            "type": "boolean",
+            "example": true,
+            "description": "Whether the rent includes a private driver"
+          },
+          "color": {
+            "type": "string",
+            "example": "Red",
+            "description": "The color of the vehicle"
+          },
+          "extraFeatures": {
+            "example": [
+              "Bluetooth",
+              "Navigation"
+            ],
+            "description": "Extra features of the vehicle",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "insurance": {
+            "type": "boolean",
+            "example": true,
+            "description": "Whether the rent includes insurance"
+          },
+          "priceDaily": {
+            "type": "number",
+            "example": 50,
+            "description": "The daily price for renting the vehicle"
+          },
+          "priceWeekly": {
+            "type": "number",
+            "example": 300,
+            "description": "The weekly price for renting the vehicle"
+          },
+          "priceMonthly": {
+            "type": "number",
+            "example": 1000,
+            "description": "The monthly price for renting the vehicle"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Available for long-term rental",
+            "description": "Additional notes about the listing"
+          },
+          "publicity": {
+            "type": "string",
+            "example": "Public",
+            "description": "The publicity status of the listing"
+          }
+        }
+      }
+    }
+  }
+}
